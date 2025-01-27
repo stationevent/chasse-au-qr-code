@@ -12,6 +12,10 @@ const qrCodes = {
 const userProgress = {}; // Stocke la progression des joueurs
 const completedPlayers = []; // Liste des joueurs ayant terminé
 
+app.get('/ping', (req, res) => {
+    res.json({ message: "Pong!" });
+});
+
 app.get('/validate-qr', (req, res) => {
     const { qrId } = req.query;
     const ip = req.ip;
