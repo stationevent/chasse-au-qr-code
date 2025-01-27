@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
 
 const qrCodes = {
     qr1: { id: "qr1", message: "Indice 1 : Cherchez près de l'arbre.", next: "qr2" },
@@ -11,6 +10,8 @@ const qrCodes = {
 
 const userProgress = {}; // Stocke la progression des joueurs
 const completedPlayers = []; // Liste des joueurs ayant terminé
+
+app.use(express.static('.')); // Servir les fichiers statiques
 
 app.get('/ping', (req, res) => {
     res.json({ message: "Pong!" });
@@ -57,5 +58,5 @@ app.get('/draw-winner', (req, res) => {
     res.json({ success: true, winner });
 });
 
-app.listen(PORT, () => console.log(`Serveur démarré sur http://localhost:${PORT}`));
-app.use(express.static('.'));
+// Exporter l'application pour Vercel
+module.exports = app;
