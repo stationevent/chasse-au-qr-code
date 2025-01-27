@@ -4,11 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeu de piste</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Bienvenue au jeu de piste</h1>
-    <div id="message"></div>
-    <button id="scan">Scanner un QR Code</button>
+    <div class="container">
+        <h1>🎯 Jeu de piste digital</h1>
+        <p>Scannez les QR Codes pour avancer dans le jeu !</p>
+
+        <div id="message" class="message"></div>
+        <button id="scan" class="btn">Scanner un QR Code</button>
+
+        <div id="progress" class="progress"></div>
+    </div>
+
+    <!-- Footer ajouté ici -->
+    <footer class="footer">
+        <p>© 2025 Station - Tous droits réservés</p>
+        <p>Contact : <a href="mailto:bonjour@station-event.fr">bonjour@station-event.fr</a></p>
+    </footer>
 
     <script src="app.js"></script>
 </body>

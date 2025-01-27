@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-
 const PORT = 3000;
 
 const qrCodes = {
@@ -10,26 +9,49 @@ const qrCodes = {
     qr4: { id: "qr4", message: "Félicitations ! Vous avez terminé.", next: null },
 };
 
-app.use(express.static('.'));
+const userProgress = {}; // Stocke la progression des joueurs
+const completedPlayers = []; // Liste des joueurs ayant terminé
 
 app.get('/validate-qr', (req, res) => {
-    const { qrId } = req.query; // Récupère l'ID du QR Code depuis la requête
+    const { qrId } = req.query;
+    const ip = req.ip;
+
     if (!qrCodes[qrId]) {
         return res.status(400).json({ success: false, message: "Code QR invalide." });
+    }
+
+    if (!userProgress[ip]) {
+        userProgress[ip] = [];
+    }
+
+    if (!userProgress[ip].includes(qrId)) {
+        userProgress[ip].push(qrId);
+    }
+
+    const total = Object.keys(qrCodes).length;
+    const progress = userProgress[ip].length;
+
+    if (progress === total && !completedPlayers.includes(ip)) {
+        completedPlayers.push(ip);
     }
 
     res.json({
         success: true,
         message: qrCodes[qrId].message,
         next: qrCodes[qrId].next,
+        progress: `${progress}/${total}`,
+        completed: progress === total
     });
 });
 
+app.get('/draw-winner', (req, res) => {
+    if (completedPlayers.length === 0) {
+        return res.json({ success: false, message: "Aucun joueur éligible." });
+    }
 
-//app.get('/', (req, res) => {
-//    res.send('Serveur en ligne !');
-//});
-
-app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
+    const winner = completedPlayers[Math.floor(Math.random() * completedPlayers.length)];
+    res.json({ success: true, winner });
 });
+
+app.listen(PORT, () => console.log(`Serveur démarré sur http://localhost:${PORT}`));
+app.use(express.static('.'));
